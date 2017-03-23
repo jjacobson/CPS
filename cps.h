@@ -8,3 +8,8 @@
 // 3-22-2017
 // Project 2 for CS372 Spring 2017 at UAF
 // Professor Dr. Hartman
+
+class Shape {
+public:
+  
+};
