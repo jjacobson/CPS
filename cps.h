@@ -32,3 +32,23 @@ public:
 private:
 	double radius;
 };
+
+class Polygon : public Shape
+{
+public:
+
+private:
+	int numSides;
+	double sideLength;
+
+};
+
+class Rectangle : public Shape
+{
+public:
+
+private:
+	int numSides;
+	double sideLength;
+
+};
