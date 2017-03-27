@@ -16,45 +16,84 @@
 #include <string>
 using std::string;
 
+/***** SHAPE *****/
+
 class Shape {
 public:
 	virtual ~Shape()=default;
 	virtual double getWidth() const=0;
-	virtual double getHeigth() const=0;
+	virtual double getHeight() const=0;
 
-	virtual string generatePostScript() const=0;	
+	virtual string generatePostScript() const=0;
+
+protected:
+	double _height;
+	double _width;
+	int _numSides;
+	double _sideLength;
 };
+
+/***** CIRCLE *****/
 
 class Circle : public Shape {
-public:
-	Circle(double r);
+public:	
+	Circle(double radius);
 	double getWidth() const override;
-	double getHeigth() const override;
+	double getHeight() const override;
 
 	string generatePostScript() const override;
-
-private:
-	double radius;
 };
+
+/***** POLYGON *****/
 
 class Polygon : public Shape
 {
 public:
+	Polygon(int numSides, double sideLength);
+	double getWidth() const override;
+	double getHeight() const override;
 
-private:
-	int numSides;
-	double sideLength;
-
+	string generatePostScript() const override;
 };
+
+/***** RECTANGLE *****/
 
 class Rectangle : public Shape
 {
 public:
+	Rectangle(double height, double width);
+	double getWidth() const override;
+	double getHeight() const override;
 
-private:
-	int numSides;
-	double sideLength;
+	string generatePostScript() const override;
+};
 
+/***** SPACER *****/
+
+class Spacer : public Shape
+{
+public:
+	Spacer(double height, double width);
+	double getWidth() const override;
+	double getHeight() const override;
+
+	string generatePostScript() const override;
+};
+
+/***** SQUARE *****/
+
+class Square : public Polygon
+{
+public:
+	Square(double sideLength);
+};
+
+/***** TRIANGLE *****/
+
+class Triangle : public Polygon
+{
+public:
+	Triangle(double sideLength);
 };
 
 #endif // CPS_H_INCLUDED
