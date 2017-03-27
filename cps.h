@@ -37,4 +37,24 @@ private:
 	double radius;
 };
 
+class Polygon : public Shape
+{
+public:
+
+private:
+	int numSides;
+	double sideLength;
+
+};
+
+class Rectangle : public Shape
+{
+public:
+
+private:
+	int numSides;
+	double sideLength;
+
+};
+
 #endif // CPS_H_INCLUDED
