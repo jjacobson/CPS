@@ -1,13 +1,17 @@
 // cps.h
+// 3-22-2017
 //
 // created by
 // Frank Cline	(fmcline@alaska.edu)
 // Alexander Eckert (aeckert@alaska.edu)
 // Jeremiah Jacobson (jjjacobson2@alaska.edu)
 // Rohan Weeden (reweeden@alaska.edu)
-// 3-22-2017
+//
 // Project 2 for CS372 Spring 2017 at UAF
 // Professor Dr. Hartman
+
+#ifndef CPS_H_INCLUDED
+#define CPS_H_INCLUDED
 
 #include <string>
 using std::string;
@@ -18,7 +22,7 @@ public:
 	virtual double getWidth() const=0;
 	virtual double getHeigth() const=0;
 
-	virtual string generate() const=0;	
+	virtual string generatePostScript() const=0;	
 };
 
 class Circle : public Shape {
@@ -27,8 +31,10 @@ public:
 	double getWidth() const override;
 	double getHeigth() const override;
 
-	string generate() const override;
+	string generatePostScript() const override;
 
 private:
 	double radius;
 };
+
+#endif // CPS_H_INCLUDED
