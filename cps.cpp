@@ -32,11 +32,27 @@ double Shape::getHeight() const {
 	return _height;
 }
 
+void Shape::setWidth(double width) {
+	_width = width;
+}
+
+void Shape::setHeight(double height) {
+	_height = height;
+}
+
+void Shape::setNumSides(int numSides) {
+	_numSides = numSides;
+}
+
+void Shape::setSideLength(double sideLength) {
+	_sideLength = sideLength;
+}
+
 /***** CIRCLE *****/
 
 Circle::Circle(double radius) {
-	_width = 2*radius;
-	_height = 2*radius;
+	setWidth(2*radius);
+	setHeight(2*radius);
 }
 
 string Circle::generatePostScript() const {
@@ -47,18 +63,18 @@ string Circle::generatePostScript() const {
 
 Polygon::Polygon(int numSides, double sideLength) {
 	if(numSides%2!=0) {
-		_height = sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides));
-		_width = (sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides));
+		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
+		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
 	}
 	else if (numSides % 4 == 0)
 	{
-		_height = sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides));
-		_width = (sideLength*sin(M_PI/numSides))/(sin(M_PI/numSides));
+		setHeight(sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides)));
+		setWidth((sideLength*sin(M_PI/numSides))/(sin(M_PI/numSides)));
 	}
 	else
 	{
-		_height = sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides));
-		_width = sideLength/(sin(M_PI/numSides));
+		setHeight(sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides)));
+		setWidth(sideLength/(sin(M_PI/numSides)));
 	}
 }
 
@@ -69,8 +85,8 @@ string Polygon::generatePostScript() const {
 /***** RECTANGLE *****/
 
 Rectangle::Rectangle(double height, double width) {
-	_width = width;
-	_height = height;
+	setWidth(width);
+	setHeight(height);
 }
 
 string Rectangle::generatePostScript() const {
@@ -80,8 +96,8 @@ string Rectangle::generatePostScript() const {
 /***** SPACER *****/
 
 Spacer::Spacer(double height, double width) {
-	_width = width;
-	_height = height;
+	setWidth(width);
+	setHeight(height);
 }
 
 string Spacer::generatePostScript() const {

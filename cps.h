@@ -27,6 +27,12 @@ public:
 	virtual string generatePostScript() const=0;
 
 protected:
+	virtual void setWidth(double width);
+	virtual void setHeight(double height);
+	virtual void setNumSides(int numSides);
+	virtual void setSideLength(double sideLength);
+
+private:
 	double _height;
 	double _width;
 	int _numSides;
@@ -38,7 +44,7 @@ protected:
 class Circle : public Shape {
 public:	
 	Circle(double radius);
-
+	
 	string generatePostScript() const override;
 };
 
@@ -68,7 +74,7 @@ class Spacer : public Shape
 {
 public:
 	Spacer(double height, double width);
-	
+
 	string generatePostScript() const override;
 };
 
