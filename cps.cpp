@@ -17,10 +17,6 @@
 #include <cmath>
 using std::sin;
 using std::cos;
-using std::abs;
-
-// const double M_PI = 3.1415926535;
-
 
 /***** Shape *****/
 
