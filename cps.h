@@ -21,8 +21,8 @@ using std::string;
 class Shape {
 public:
 	virtual ~Shape()=default;
-	virtual double getWidth() const=0;
-	virtual double getHeight() const=0;
+	virtual double getWidth() const;
+	virtual double getHeight() const;
 
 	virtual string generatePostScript() const=0;
 
@@ -38,8 +38,6 @@ protected:
 class Circle : public Shape {
 public:	
 	Circle(double radius);
-	double getWidth() const override;
-	double getHeight() const override;
 
 	string generatePostScript() const override;
 };
@@ -50,8 +48,6 @@ class Polygon : public Shape
 {
 public:
 	Polygon(int numSides, double sideLength);
-	double getWidth() const override;
-	double getHeight() const override;
 
 	string generatePostScript() const override;
 };
@@ -62,8 +58,6 @@ class Rectangle : public Shape
 {
 public:
 	Rectangle(double height, double width);
-	double getWidth() const override;
-	double getHeight() const override;
 
 	string generatePostScript() const override;
 };
@@ -74,9 +68,7 @@ class Spacer : public Shape
 {
 public:
 	Spacer(double height, double width);
-	double getWidth() const override;
-	double getHeight() const override;
-
+	
 	string generatePostScript() const override;
 };
 

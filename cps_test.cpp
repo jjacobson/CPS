@@ -29,6 +29,7 @@ using std::cos;
 using std::abs;
 using std::sqrt;
 
+
 TEST_CASE( "Circle" )
 {
     Circle cir1(1);

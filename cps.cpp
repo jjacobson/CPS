@@ -19,19 +19,24 @@ using std::sin;
 using std::cos;
 using std::abs;
 
+// const double M_PI = 3.1415926535;
+
+
+/***** Shape *****/
+
+double Shape::getWidth() const {
+	return _width;
+}
+
+double Shape::getHeight() const {
+	return _height;
+}
+
 /***** CIRCLE *****/
 
 Circle::Circle(double radius) {
 	_width = 2*radius;
 	_height = 2*radius;
-}
-
-double Circle::getWidth() const {
-	return _width;
-}
-
-double Circle::getHeight() const {
-	return _height;
 }
 
 string Circle::generatePostScript() const {
@@ -57,14 +62,6 @@ Polygon::Polygon(int numSides, double sideLength) {
 	}
 }
 
-double Polygon::getWidth() const {
-	return _width;
-}
-
-double Polygon::getHeight() const {
-	return _height;
-}
-
 string Polygon::generatePostScript() const {
 	return "Polygon";
 }
@@ -76,14 +73,6 @@ Rectangle::Rectangle(double height, double width) {
 	_height = height;
 }
 
-double Rectangle::getWidth() const {
-	return _width;
-}
-
-double Rectangle::getHeight() const {
-	return _height;
-}
-
 string Rectangle::generatePostScript() const {
 	return "Rectangle";
 }
@@ -93,14 +82,6 @@ string Rectangle::generatePostScript() const {
 Spacer::Spacer(double height, double width) {
 	_width = width;
 	_height = height;
-}
-
-double Spacer::getWidth() const {
-	return _width;
-}
-
-double Spacer::getHeight() const {
-	return _height;
 }
 
 string Spacer::generatePostScript() const {
