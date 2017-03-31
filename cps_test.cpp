@@ -28,7 +28,11 @@ using std::sin;
 using std::cos;
 using std::abs;
 using std::sqrt;
-
+#include <vector>
+using std::vector;
+#include <memory>
+using std::shared_ptr;
+using std::make_shared;
 
 TEST_CASE( "Circle" )
 {
@@ -169,5 +173,42 @@ TEST_CASE( "Triangle" )
         REQUIRE( tri1.getWidth() == (5*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
         REQUIRE( tri2.getWidth() == (13*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
         REQUIRE( tri3.getWidth() == (0.9*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
+    }
+}
+
+TEST_CASE( "Layered Shape" )
+{
+	Triangle triangle(3);
+	Circle circle(3);
+	Square square(4);
+	Rectangle rectangle(2,8);
+
+	vector<shared_ptr<Shape>> shapes1;
+	shapes1.push_back(make_shared<Triangle>(triangle));
+	shapes1.push_back(make_shared<Circle>(circle));
+	shapes1.push_back(make_shared<Triangle>(triangle));
+	shapes1.push_back(make_shared<Rectangle>(rectangle));
+
+	vector<shared_ptr<Shape>> shapes2{make_shared<Square>(square)};
+
+	LayeredShape ls1(shapes1);
+	LayeredShape ls2(shapes2);
+	LayeredShape ls3(vector<shared_ptr<Shape>>
+	{
+		make_shared<Circle>(5), make_shared<Circle>(2), make_shared<Rectangle>(1,2), make_shared<Triangle>(1)
+	});
+
+    SECTION( "Heigth" )
+    {
+        REQUIRE( ls1.getHeight() == 6);
+        REQUIRE( ls2.getHeight() == 4);
+        REQUIRE( ls3.getHeight() == 10);
+    }
+
+    SECTION( "Width" )
+    {
+        REQUIRE( ls1.getWidth() == 8);
+        REQUIRE( ls2.getWidth() == 4);
+        REQUIRE( ls3.getWidth() == 10);
     }
 }

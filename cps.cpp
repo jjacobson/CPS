@@ -107,3 +107,24 @@ Square::Square(double sideLength): Polygon(4, sideLength) {}
 /***** TRIANGLE *****/
 
 Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
+
+/***** LayeredShape *****/
+
+LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
+	_shapes = shapes;
+	int width = 0;
+	int height = 0;
+	for (auto const & shape : _shapes)
+	{
+		if (shape->getHeight() > height)
+			height = shape->getHeight();
+		if (shape->getWidth() > width)
+			width = shape->getWidth();
+	}
+	setWidth(width);
+	setHeight(height);
+}
+
+string LayeredShape::generatePostScript() const {
+	return "LayeredShape";
+}

@@ -15,6 +15,12 @@
 
 #include <string>
 using std::string;
+#include <vector>
+using std::vector;
+#include <memory>
+using std::shared_ptr;
+
+const double M_PI = 3.1415926535;
 
 /***** SHAPE *****/
 
@@ -92,6 +98,17 @@ class Triangle : public Polygon
 {
 public:
 	Triangle(double sideLength);
+};
+
+/***** LayeredShape *****/
+
+class LayeredShape : public Shape
+{
+public:
+	LayeredShape(vector<shared_ptr<Shape>> shapes);
+	string generatePostScript() const override;
+private:
+	vector<shared_ptr<Shape>> _shapes;
 };
 
 #endif // CPS_H_INCLUDED
