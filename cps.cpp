@@ -17,6 +17,7 @@
 #include <cmath>
 using std::sin;
 using std::cos;
+using std::move;
 
 /***** Shape *****/
 
@@ -107,6 +108,29 @@ Square::Square(double sideLength): Polygon(4, sideLength) {}
 /***** TRIANGLE *****/
 
 Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
+
+/***** RotatedShape *****/
+
+RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
+	_shape = shape;
+	double width = shape->getWidth();
+	double height = shape->getHeight();
+	if(rotationAngle == 0 || rotationAngle == 180) {
+		setWidth(width);
+		setHeight(height);
+	}
+	else {
+		setWidth(height);
+		setHeight(width);
+	}
+}
+
+string RotatedShape::generatePostScript() const {
+	string postscript = "gsave\n";
+	postscript += "Rotated Shape";
+	postscript += "grestore";
+	return postscript;
+}
 
 /***** LayeredShape *****/
 
