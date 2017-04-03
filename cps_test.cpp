@@ -40,6 +40,7 @@ TEST_CASE( "Circle" )
     Circle cir2(15.0);
     Circle cir3(0.5);
     Circle cir4(200);
+    Circle cir5(72);
 
     SECTION( "Heigth" )
     {
@@ -49,7 +50,7 @@ TEST_CASE( "Circle" )
         REQUIRE( cir4.getHeight() == 400.0 );
     }
 
-        SECTION( "Width" )
+    SECTION( "Width" )
     {
         REQUIRE( cir1.getWidth() == 2.0 );
         REQUIRE( cir2.getWidth() == 30.0 );
@@ -95,7 +96,7 @@ TEST_CASE( "Rectangle" )
         REQUIRE( rec4.getHeight() == 200.0 );
     }
 
-        SECTION( "Width" )
+    SECTION( "Width" )
     {
         REQUIRE( rec1.getWidth() == 5.0 );
         REQUIRE( rec2.getWidth() == 13.0 );
@@ -215,6 +216,11 @@ TEST_CASE( "Stacked Shapes" )
 		make_shared<Polygon>(polygon), make_shared<Square>(square),
 		make_shared<Circle>(circle), make_shared<Triangle>(triangle)
 	};
+
+    vector<shared_ptr<Shape>> shapes4 {
+        make_shared<Rectangle>(rectangle), make_shared<Circle>(circle),
+        make_shared<Circle>(circle), make_shared<Rectangle>(rectangle)
+    };
 
     SECTION( "LayeredShape" )
     {

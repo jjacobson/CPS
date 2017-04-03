@@ -20,8 +20,16 @@ using std::to_string;
 using std::vector;
 #include <memory>
 using std::shared_ptr;
+#include <fstream>
+using std::ofstream;
+#include <iostream>
+using std::cout;
+using std::endl;
 
 const double M_PI = 3.1415926535;
+
+/***** String to Postscript file *****/
+void stringToPostscriptFile(const string & postscript, const string & filename);
 
 /***** SHAPE *****/
 

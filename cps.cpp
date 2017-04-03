@@ -18,6 +18,22 @@
 using std::sin;
 using std::cos;
 
+/***** String to Postscript file *****/
+void stringToPostscriptFile(const string & postscript, const string & filename)
+{
+	ofstream postscriptFile;
+	try
+	{
+		postscriptFile.open(filename);
+		postscriptFile << postscript << " showpage";
+		postscriptFile.close();
+	}
+	catch (std::exception & e)
+	{
+		cout << e.what() << endl;
+	}
+}
+
 /***** Shape *****/
 
 double Shape::getWidth() const {
@@ -52,7 +68,11 @@ Circle::Circle(double radius) {
 }
 
 string Circle::generatePostScript() const {
-	return "Circle";
+	string radius = to_string(getWidth()/2);
+	string postscript = 
+	"gsave " + radius + " " + radius + " translate " +
+	"newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
+	return postscript;
 }
 
 /***** POLYGON *****/
@@ -86,8 +106,24 @@ Rectangle::Rectangle(double height, double width) {
 }
 
 string Rectangle::generatePostScript() const {
-	return "Rectangle";
+	string width = to_string(getWidth());
+	string height = to_string(getHeight());
+	string postscript = "gsave newpath 0 0 moveto ";
+	postscript += height + " 0 lineto "; 
+	postscript += height + " " + width + " lineto ";
+	postscript += "0 " + width + " lineto closepath stroke grestore "; 
+	return postscript;
 }
+/*
+% 1 x 1 square starting at (1,1) with one side missing
+newpath
+	1 inch 1 inch moveto
+	2 inch 1 inch lineto
+	2 inch 2 inch lineto
+	1 inch 2 inch lineto
+stroke
+showpage
+*/
 
 /***** SPACER *****/
 
@@ -126,12 +162,12 @@ LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
 }
 
 string LayeredShape::generatePostScript() const {
-	string postscript = "gsave\n";
+	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + "\n";
+		postscript += shape->generatePostScript() + " ";
 	}
-	postscript += "grestore";
+	postscript += "grestore ";
 	return postscript;
 }
 
@@ -152,13 +188,13 @@ VerticalShape::VerticalShape(vector<shared_ptr<Shape>> shapes) {
 }
 
 string VerticalShape::generatePostScript() const {
-	string postscript = "gsave\n";
+	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + "\n";
-		postscript += to_string(shape->getHeight()) + " translate\n";
+		postscript += shape->generatePostScript() + "0 ";
+		postscript += to_string(shape->getHeight()) + " translate ";
 	}
-	postscript += "grestore";
+	postscript += "grestore ";
 	return postscript;
 }
 
@@ -179,12 +215,12 @@ HorizontalShape::HorizontalShape(vector<shared_ptr<Shape>> shapes) {
 }
 
 string HorizontalShape::generatePostScript() const {
-	string postscript = "gsave\n";
+	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + "\n";
-		postscript += to_string(shape->getWidth()) + " translate\n";
+		postscript += shape->generatePostScript();
+		postscript += to_string(shape->getWidth()) + " 0 translate ";
 	}
-	postscript += "grestore";
+	postscript += "grestore ";
 	return postscript;
 }
