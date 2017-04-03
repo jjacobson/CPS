@@ -15,6 +15,7 @@
 
 #include <string>
 using std::string;
+using std::to_string;
 #include <vector>
 using std::vector;
 #include <memory>
@@ -106,6 +107,28 @@ class LayeredShape : public Shape
 {
 public:
 	LayeredShape(vector<shared_ptr<Shape>> shapes);
+	string generatePostScript() const override;
+private:
+	vector<shared_ptr<Shape>> _shapes;
+};
+
+/***** VerticalShape *****/
+
+class VerticalShape : public Shape
+{
+public:
+	VerticalShape(vector<shared_ptr<Shape>> shapes);
+	string generatePostScript() const override;
+private:
+	vector<shared_ptr<Shape>> _shapes;
+};
+
+/***** HorizontalShape *****/
+
+class HorizontalShape : public Shape
+{
+public:
+	HorizontalShape(vector<shared_ptr<Shape>> shapes);
 	string generatePostScript() const override;
 private:
 	vector<shared_ptr<Shape>> _shapes;

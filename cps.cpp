@@ -112,8 +112,8 @@ Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
 
 LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
 	_shapes = shapes;
-	int width = 0;
-	int height = 0;
+	double width = 0;
+	double height = 0;
 	for (auto const & shape : _shapes)
 	{
 		if (shape->getHeight() > height)
@@ -126,5 +126,65 @@ LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
 }
 
 string LayeredShape::generatePostScript() const {
-	return "LayeredShape";
+	string postscript = "gsave\n";
+	for (auto const shape : _shapes)
+	{
+		postscript += shape->generatePostScript() + "\n";
+	}
+	postscript += "grestore";
+	return postscript;
+}
+
+/***** VerticalShape *****/
+
+VerticalShape::VerticalShape(vector<shared_ptr<Shape>> shapes) {
+	_shapes = shapes;
+	double width = 0;
+	double height = 0;
+	for (auto const & shape : _shapes)
+	{
+		height += shape->getHeight();
+		if (shape->getWidth() > width)
+			width = shape->getWidth();
+	}
+	setWidth(width);
+	setHeight(height);
+}
+
+string VerticalShape::generatePostScript() const {
+	string postscript = "gsave\n";
+	for (auto const shape : _shapes)
+	{
+		postscript += shape->generatePostScript() + "\n";
+		postscript += to_string(shape->getHeight()) + " translate\n";
+	}
+	postscript += "grestore";
+	return postscript;
+}
+
+/***** HorizontalShape *****/
+
+HorizontalShape::HorizontalShape(vector<shared_ptr<Shape>> shapes) {
+	_shapes = shapes;
+	double width = 0;
+	double height = 0;
+	for (auto const & shape : _shapes)
+	{
+		width += shape->getWidth();
+		if (shape->getHeight() > height)
+			height = shape->getHeight();
+	}
+	setWidth(width);
+	setHeight(height);
+}
+
+string HorizontalShape::generatePostScript() const {
+	string postscript = "gsave\n";
+	for (auto const shape : _shapes)
+	{
+		postscript += shape->generatePostScript() + "\n";
+		postscript += to_string(shape->getWidth()) + " translate\n";
+	}
+	postscript += "grestore";
+	return postscript;
 }

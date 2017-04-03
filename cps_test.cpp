@@ -176,39 +176,98 @@ TEST_CASE( "Triangle" )
     }
 }
 
-TEST_CASE( "Layered Shape" )
+double getHeightOfShapes(const vector<shared_ptr<Shape>> & shapes)
 {
-	Triangle triangle(3);
-	Circle circle(3);
-	Square square(4);
-	Rectangle rectangle(2,8);
-
-	vector<shared_ptr<Shape>> shapes1;
-	shapes1.push_back(make_shared<Triangle>(triangle));
-	shapes1.push_back(make_shared<Circle>(circle));
-	shapes1.push_back(make_shared<Triangle>(triangle));
-	shapes1.push_back(make_shared<Rectangle>(rectangle));
-
-	vector<shared_ptr<Shape>> shapes2{make_shared<Square>(square)};
-
-	LayeredShape ls1(shapes1);
-	LayeredShape ls2(shapes2);
-	LayeredShape ls3(vector<shared_ptr<Shape>>
+	double height = 0;
+	for (auto const & shape : shapes)
 	{
-		make_shared<Circle>(5), make_shared<Circle>(2), make_shared<Rectangle>(1,2), make_shared<Triangle>(1)
-	});
+		height += shape->getHeight();
+	}
+	return height;
+}
 
-    SECTION( "Heigth" )
-    {
-        REQUIRE( ls1.getHeight() == 6);
-        REQUIRE( ls2.getHeight() == 4);
-        REQUIRE( ls3.getHeight() == 10);
-    }
+double getWidthOfShapes(const vector<shared_ptr<Shape>> & shapes)
+{
+	double width = 0;
+	for (auto const & shape : shapes)
+	{
+		width += shape->getWidth();
+	}
+	return width;
+}
 
-    SECTION( "Width" )
+TEST_CASE( "Stacked Shapes" )
+{
+	Triangle triangle(3.0);
+	Circle circle(3.5);
+	Square square(4.0);
+	Rectangle rectangle(2.0,8.0);
+	Polygon polygon(6,1.0);
+
+	vector<shared_ptr<Shape>> shapes1 {
+		make_shared<Triangle>(triangle), make_shared<Circle>(circle),
+		make_shared<Triangle>(triangle), make_shared<Rectangle>(rectangle)
+	};
+
+	vector<shared_ptr<Shape>> shapes2 { make_shared<Square>(square) };
+
+	vector<shared_ptr<Shape>> shapes3 {
+		make_shared<Polygon>(polygon), make_shared<Square>(square),
+		make_shared<Circle>(circle), make_shared<Triangle>(triangle)
+	};
+
+    SECTION( "LayeredShape" )
     {
+    	LayeredShape ls1(shapes1);
+		LayeredShape ls2(shapes2);
+		LayeredShape ls3(vector<shared_ptr<Shape>> {
+			make_shared<Circle>(5), make_shared<Circle>(2), 
+			make_shared<Rectangle>(1,2), make_shared<Triangle>(1)
+		});
+    	// Height
+        REQUIRE( ls1.getHeight() == 7.0);
+        REQUIRE( ls2.getHeight() == square.getHeight());
+        REQUIRE( ls3.getHeight() == 10.0);
+        // Width
         REQUIRE( ls1.getWidth() == 8);
-        REQUIRE( ls2.getWidth() == 4);
+        REQUIRE( ls2.getWidth() == square.getWidth());
         REQUIRE( ls3.getWidth() == 10);
     }
+
+    SECTION( "VerticalShape" )
+    {
+    	VerticalShape vs1(shapes1);
+    	VerticalShape vs2(shapes2);
+    	VerticalShape vs3(shapes3);
+    	double shape1Height = getHeightOfShapes(shapes1);
+    	double shape2Height = getHeightOfShapes(shapes2);
+    	double shape3Height = getHeightOfShapes(shapes3);
+    	// Height
+        REQUIRE( vs1.getHeight() == shape1Height);
+        REQUIRE( vs2.getHeight() == shape2Height);
+        REQUIRE( vs3.getHeight() == shape3Height);
+        // Width
+        REQUIRE( vs1.getWidth() == 8);
+        REQUIRE( vs2.getWidth() == square.getWidth());
+        REQUIRE( vs3.getWidth() == 7);
+    }
+
+    SECTION( "HorizontalShape" )
+    {
+    	HorizontalShape hs1(shapes1);
+    	HorizontalShape hs2(shapes2);
+    	HorizontalShape hs3(shapes3);
+    	double shape1Width = getWidthOfShapes(shapes1);
+    	double shape2Width = getWidthOfShapes(shapes2);
+    	double shape3Width = getWidthOfShapes(shapes3);
+    	// Height
+        REQUIRE( hs1.getHeight() == 7);
+        REQUIRE( hs2.getHeight() == square.getHeight());
+        REQUIRE( hs3.getHeight() == 7);
+        // Width
+        REQUIRE( hs1.getWidth() == shape1Width);
+        REQUIRE( hs2.getWidth() == shape2Width);
+        REQUIRE( hs3.getWidth() == shape3Width);
+    }
 }
+
