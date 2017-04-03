@@ -17,6 +17,7 @@
 #include <cmath>
 using std::sin;
 using std::cos;
+using std::move;
 
 /***** String to Postscript file *****/
 void stringToPostscriptFile(const string & postscript, const string & filename)
@@ -114,16 +115,6 @@ string Rectangle::generatePostScript() const {
 	postscript += "0 " + width + " lineto closepath stroke grestore "; 
 	return postscript;
 }
-/*
-% 1 x 1 square starting at (1,1) with one side missing
-newpath
-	1 inch 1 inch moveto
-	2 inch 1 inch lineto
-	2 inch 2 inch lineto
-	1 inch 2 inch lineto
-stroke
-showpage
-*/
 
 /***** SPACER *****/
 
@@ -143,6 +134,29 @@ Square::Square(double sideLength): Polygon(4, sideLength) {}
 /***** TRIANGLE *****/
 
 Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
+
+/***** RotatedShape *****/
+
+RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
+	_shape = shape;
+	double width = shape->getWidth();
+	double height = shape->getHeight();
+	if(rotationAngle == 0 || rotationAngle == 180) {
+		setWidth(width);
+		setHeight(height);
+	}
+	else {
+		setWidth(height);
+		setHeight(width);
+	}
+}
+
+string RotatedShape::generatePostScript() const {
+	string postscript = "gsave\n";
+	postscript += "Rotated Shape";
+	postscript += "grestore";
+	return postscript;
+}
 
 /***** LayeredShape *****/
 

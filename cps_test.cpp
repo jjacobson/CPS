@@ -197,6 +197,64 @@ double getWidthOfShapes(const vector<shared_ptr<Shape>> & shapes)
 	return width;
 }
 
+TEST_CASE( "Compound Shapes" )
+{
+	Triangle triangle(3.0);
+	Circle circle(3.5);
+	Square square(4.0);
+	Rectangle rectangle(2.0,8.0);
+	Polygon polygon(6,1.0);
+	
+	SECTION( "RotatedShape" )
+    {
+    	RotatedShape rs1(make_shared<Square>(square), 0);
+    	RotatedShape rs2(make_shared<Square>(square), 90);
+    	RotatedShape rs3(make_shared<Square>(square), 180);
+    	RotatedShape rs4(make_shared<Square>(square), 270);
+		
+		RotatedShape rs5(make_shared<Circle>(circle), 0);
+		RotatedShape rs6(make_shared<Circle>(circle), 90);
+		RotatedShape rs7(make_shared<Circle>(circle), 180);
+		RotatedShape rs8(make_shared<Circle>(circle), 270);
+		
+    	RotatedShape rs9(make_shared<Rectangle>(rectangle), 0);
+    	RotatedShape rs10(make_shared<Rectangle>(rectangle), 90);
+    	RotatedShape rs11(make_shared<Rectangle>(rectangle), 180);
+    	RotatedShape rs12(make_shared<Rectangle>(rectangle), 270);
+		
+    	// Height
+        REQUIRE( rs1.getHeight() == square.getHeight());
+        REQUIRE( rs2.getHeight() == square.getWidth());
+        REQUIRE( rs3.getHeight() == square.getHeight());
+        REQUIRE( rs4.getHeight() == square.getWidth());
+		
+        REQUIRE( rs5.getHeight() == circle.getHeight());
+        REQUIRE( rs6.getHeight() == circle.getWidth());
+        REQUIRE( rs7.getHeight() == circle.getHeight());
+        REQUIRE( rs8.getHeight() == circle.getWidth());
+		
+        REQUIRE( rs9.getHeight() == rectangle.getHeight());
+        REQUIRE( rs10.getHeight() == rectangle.getWidth());
+        REQUIRE( rs11.getHeight() == rectangle.getHeight());
+        REQUIRE( rs12.getHeight() == rectangle.getWidth());
+        // Width
+        REQUIRE( rs1.getWidth() == square.getWidth());
+        REQUIRE( rs2.getWidth() == square.getHeight());
+        REQUIRE( rs3.getWidth() == square.getWidth());
+        REQUIRE( rs4.getWidth() == square.getHeight());
+		
+        REQUIRE( rs5.getWidth() == circle.getWidth());
+        REQUIRE( rs6.getWidth() == circle.getHeight());
+        REQUIRE( rs7.getWidth() == circle.getWidth());
+        REQUIRE( rs8.getWidth() == circle.getHeight());
+		
+        REQUIRE( rs9.getWidth() == rectangle.getWidth());
+        REQUIRE( rs10.getWidth() == rectangle.getHeight());
+        REQUIRE( rs11.getWidth() == rectangle.getWidth());
+        REQUIRE( rs12.getWidth() == rectangle.getHeight());
+    }
+}
+
 TEST_CASE( "Stacked Shapes" )
 {
 	Triangle triangle(3.0);

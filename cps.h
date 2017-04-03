@@ -109,6 +109,17 @@ public:
 	Triangle(double sideLength);
 };
 
+/***** Rotated*****/
+
+class RotatedShape : public Shape
+{
+public:
+	RotatedShape(shared_ptr<Shape> shape, double rotationAngle);
+	string generatePostScript() const override;
+private:
+	shared_ptr<Shape> _shape;
+};
+
 /***** LayeredShape *****/
 
 class LayeredShape : public Shape
