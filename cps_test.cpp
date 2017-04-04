@@ -343,21 +343,38 @@ TEST_CASE( "Post Script" )
     Rectangle rect(72,72*2);
     Circle circ(72);
     Circle circ2(36);
+    Polygon hexagon(6,36);
+    Polygon septagon(7,36);
     
     vector<shared_ptr<Shape>> shapes1
     {
         make_shared<Circle>(circ), make_shared<Rectangle>(rect), make_shared<Circle>(circ2)
+    };
+    vector<shared_ptr<Shape>> shapes2
+    {
+        make_shared<Polygon>(hexagon), make_shared<Rectangle>(rect), make_shared<Circle>(circ2),
+        make_shared<Polygon>(septagon), make_shared<Circle>(circ)
     };
 
     LayeredShape ls(shapes1);
     VerticalShape vs(shapes1);
     HorizontalShape hs(shapes1);
 
+    LayeredShape ls2(shapes2);
+    VerticalShape vs2(shapes2);
+    HorizontalShape hs2(shapes2);
+
+    postscript += hexagon.generatePostScript() + " showpage ";
+    postscript += septagon.generatePostScript()+ " showpage ";
     postscript += rect.generatePostScript() + " showpage ";
     postscript += circ.generatePostScript() + " showpage 144 144 translate ";
     postscript += ls.generatePostScript() + " showpage 144 144 translate ";
     postscript += vs.generatePostScript() + " showpage 144 144 translate ";
-    postscript += hs.generatePostScript();
+    postscript += hs.generatePostScript() + " showpage 144 144 translate ";
+
+    postscript += ls2.generatePostScript() + " showpage 144 144 translate ";
+    postscript += vs2.generatePostScript() + " showpage 144 144 translate ";
+    postscript += hs2.generatePostScript();
 
     stringToPostscriptFile(postscript,filename);
 }
