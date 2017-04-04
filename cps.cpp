@@ -267,3 +267,24 @@ string HorizontalShape::generatePostScript() const {
 	postscript += "grestore ";
 	return postscript;
 }
+
+/***** ScaledShape *****/
+
+ScaledShape::ScaledShape(shared_ptr<Shape> shape, double fx, double fy): _shape(shape), _fx(fx), _fy(fy)
+{}
+
+double ScaledShape::getWidth() const {
+	return _shape->getWidth()*_fx;
+}
+
+double ScaledShape::getHeight() const {
+	return _shape->getHeight()*_fy;
+}
+
+string ScaledShape::generatePostScript() const {
+	string postscript = "gsave ";
+	postscript += to_string(_fx) + " " + to_string(_fy) + " scale ";
+	postscript += _shape->generatePostScript() + "grestore ";
+	return postscript;
+}
+

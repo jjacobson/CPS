@@ -156,4 +156,19 @@ private:
 	vector<shared_ptr<Shape>> _shapes;
 };
 
+/***** Scaled Shape *****/
+
+class ScaledShape : public Shape
+{
+public:
+	ScaledShape(shared_ptr<Shape> shape, double fx, double fy);
+	string generatePostScript() const override;
+	double getWidth() const override;
+	double getHeight() const override;
+private:
+	double _fx;
+	double _fy;
+	shared_ptr<Shape> _shape;
+};
+
 #endif // CPS_H_INCLUDED
