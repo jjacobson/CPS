@@ -44,8 +44,8 @@ public:
 protected:
 	virtual void setWidth(double width);
 	virtual void setHeight(double height);
-	virtual void setNumSides(int numSides);
-	virtual void setSideLength(double sideLength);
+//	virtual void setNumSides(int numSides);
+//	virtual void setSideLength(double sideLength);
 
 private:
 	double _height;
@@ -72,7 +72,7 @@ public:
 
 	string generatePostScript() const override;
 private:
-	int _sides, _sideLength;
+	int _numSides, _sideLength;
 };
 
 /***** RECTANGLE *****/

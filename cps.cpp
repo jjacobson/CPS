@@ -228,10 +228,12 @@ VerticalShape::VerticalShape(vector<shared_ptr<Shape>> shapes) {
 
 string VerticalShape::generatePostScript() const {
 	string postscript = "gsave ";
-	for (auto const shape : _shapes)
+	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
 	{
-		postscript += shape->generatePostScript();
-		postscript += "0 " + to_string(shape->getHeight()/2) + " translate ";
+		postscript += (*iter)->generatePostScript();
+		postscript += "0 " + to_string((*iter)->getHeight()/2) + " translate ";	
+		if (iter+1 != _shapes.end())
+			postscript += "0 " + to_string((*(iter+1))->getHeight()/2) + " translate ";	
 	}
 	postscript += "grestore ";
 	return postscript;
@@ -255,10 +257,12 @@ HorizontalShape::HorizontalShape(vector<shared_ptr<Shape>> shapes) {
 
 string HorizontalShape::generatePostScript() const {
 	string postscript = "gsave ";
-	for (auto const shape : _shapes)
+	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
 	{
-		postscript += shape->generatePostScript();
-		postscript += to_string(shape->getWidth()/2) + " 0 translate ";
+		postscript += (*iter)->generatePostScript();
+		postscript += to_string((*iter)->getWidth()/2) + " 0 translate ";	
+		if (iter+1 != _shapes.end())
+			postscript += to_string((*(iter+1))->getWidth()/2) + " 0 translate ";
 	}
 	postscript += "grestore ";
 	return postscript;

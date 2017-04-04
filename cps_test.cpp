@@ -354,9 +354,9 @@ TEST_CASE( "Post Script" )
     HorizontalShape hs(shapes1);
 
     postscript += rect.generatePostScript() + " showpage ";
-    postscript += circ.generatePostScript() + " showpage 360 360 translate ";
-    postscript += ls.generatePostScript() + " showpage 72 360 translate ";
-    postscript += vs.generatePostScript() + " showpage 360 360 translate ";
+    postscript += circ.generatePostScript() + " showpage 144 144 translate ";
+    postscript += ls.generatePostScript() + " showpage 144 144 translate ";
+    postscript += vs.generatePostScript() + " showpage 144 144 translate ";
     postscript += hs.generatePostScript();
 
     stringToPostscriptFile(postscript,filename);
