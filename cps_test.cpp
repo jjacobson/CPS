@@ -342,9 +342,22 @@ TEST_CASE( "Post Script" )
     
     Rectangle rect(72,72*2);
     Circle circ(72);
+    Circle circ2(36);
+    
+    vector<shared_ptr<Shape>> shapes1
+    {
+        make_shared<Circle>(circ), make_shared<Rectangle>(rect), make_shared<Circle>(circ2)
+    };
+
+    LayeredShape ls(shapes1);
+    VerticalShape vs(shapes1);
+    HorizontalShape hs(shapes1);
 
     postscript += rect.generatePostScript() + " showpage ";
-    postscript += circ.generatePostScript();
+    postscript += circ.generatePostScript() + " showpage 360 360 translate ";
+    postscript += ls.generatePostScript() + " showpage 72 360 translate ";
+    postscript += vs.generatePostScript() + " showpage 360 360 translate ";
+    postscript += hs.generatePostScript();
 
     stringToPostscriptFile(postscript,filename);
 }

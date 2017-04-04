@@ -181,7 +181,7 @@ string LayeredShape::generatePostScript() const {
 	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + " ";
+		postscript += shape->generatePostScript();
 	}
 	postscript += "grestore ";
 	return postscript;
@@ -207,8 +207,8 @@ string VerticalShape::generatePostScript() const {
 	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + "0 ";
-		postscript += to_string(shape->getHeight()) + " translate ";
+		postscript += shape->generatePostScript();
+		postscript += "0 " + to_string(shape->getHeight()/2) + " translate ";
 	}
 	postscript += "grestore ";
 	return postscript;
@@ -235,7 +235,7 @@ string HorizontalShape::generatePostScript() const {
 	for (auto const shape : _shapes)
 	{
 		postscript += shape->generatePostScript();
-		postscript += to_string(shape->getWidth()) + " 0 translate ";
+		postscript += to_string(shape->getWidth()/2) + " 0 translate ";
 	}
 	postscript += "grestore ";
 	return postscript;
