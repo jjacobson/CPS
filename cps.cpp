@@ -53,14 +53,6 @@ void Shape::setHeight(double height) {
 	_height = height;
 }
 
-void Shape::setNumSides(int numSides) {
-	_numSides = numSides;
-}
-
-void Shape::setSideLength(double sideLength) {
-	_sideLength = sideLength;
-}
-
 /***** CIRCLE *****/
 
 Circle::Circle(double radius) {
@@ -77,7 +69,7 @@ string Circle::generatePostScript() const {
 
 /***** POLYGON *****/
 
-Polygon::Polygon(int numSides, double sideLength) {
+Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLength(sideLength) {
 	if(numSides%2!=0) {
 		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
 		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
@@ -95,7 +87,20 @@ Polygon::Polygon(int numSides, double sideLength) {
 }
 
 string Polygon::generatePostScript() const {
-	return "Polygon";
+	int totalAngle = (_numSides - 2) * 180; // formula for interior angles
+	string interiorAngle = to_string(180 - (totalAngle / _numSides));
+	string sideLength = to_string(_sideLength);
+	string sidesSubOne = to_string(_numSides - 1);
+
+	string postscript = "gsave newpath ";
+	postscript += "0 0 moveto "; // temporary moveto ?
+	postscript += "1 1 " + sidesSubOne + " { ";
+	postscript += sideLength + " 0 rlineto ";
+	postscript += interiorAngle + " rotate ";
+	postscript += "} for ";
+	postscript += "closepath stroke grestore ";
+
+	return postscript;
 }
 
 /***** RECTANGLE *****/
