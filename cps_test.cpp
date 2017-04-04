@@ -335,3 +335,17 @@ TEST_CASE( "Stacked Shapes" )
     }
 }
 
+TEST_CASE( "Post Script" )
+{
+    const string filename = "test.ps";
+    string postscript = "";
+    
+    Rectangle rect(72,72*2);
+    Circle circ(72);
+
+    postscript += rect.generatePostScript() + " showpage ";
+    postscript += circ.generatePostScript();
+
+    stringToPostscriptFile(postscript,filename);
+}
+

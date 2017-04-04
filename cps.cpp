@@ -71,8 +71,7 @@ Circle::Circle(double radius) {
 string Circle::generatePostScript() const {
 	string radius = to_string(getWidth()/2);
 	string postscript = 
-	"gsave " + radius + " " + radius + " translate " +
-	"newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
+	"gsave newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
 	return postscript;
 }
 
@@ -109,10 +108,13 @@ Rectangle::Rectangle(double height, double width) {
 string Rectangle::generatePostScript() const {
 	string width = to_string(getWidth());
 	string height = to_string(getHeight());
-	string postscript = "gsave newpath 0 0 moveto ";
-	postscript += height + " 0 lineto "; 
-	postscript += height + " " + width + " lineto ";
-	postscript += "0 " + width + " lineto closepath stroke grestore "; 
+	string halfWidth = to_string(getWidth()/2);
+	string halfHeight = to_string(getHeight()/2);
+
+	string postscript = "gsave newpath " + halfWidth + " " + halfHeight + " moveto ";
+	postscript += "0 -" + height + " rlineto "; 
+	postscript += "-" + width + " 0 rlineto ";
+	postscript += "0 " + height + " rlineto closepath stroke grestore "; 
 	return postscript;
 }
 
