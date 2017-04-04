@@ -69,11 +69,7 @@ string Circle::generatePostScript() const {
 
 /***** POLYGON *****/
 
-<<<<<<< HEAD
-Polygon::Polygon(int numSides, double sideLength):_sides(numSides), _sideLength(sideLength) {
-=======
 Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLength(sideLength) {
->>>>>>> 6df17c4d21662c184590c78a206da7f5898c5b69
 	if(numSides%2!=0) {
 		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
 		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
