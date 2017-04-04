@@ -109,7 +109,7 @@ string Polygon::generatePostScript() const {
 	string sideLength = to_string(_sideLength);
 	string sidesSubOne = to_string(_numSides - 1);
 
-	string postscript = "gsave "
+	string postscript = "gsave ";
 	postscript += to_string(getWidth() / 2) + "0 translate newpath ";
 	postscript += "0 0 moveto "; // temporary moveto ?
 	postscript += "1 1 " + sidesSubOne + " { ";
