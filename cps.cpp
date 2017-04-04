@@ -53,14 +53,6 @@ void Shape::setHeight(double height) {
 	_height = height;
 }
 
-void Shape::setNumSides(int numSides) {
-	_numSides = numSides;
-}
-
-void Shape::setSideLength(double sideLength) {
-	_sideLength = sideLength;
-}
-
 /***** CIRCLE *****/
 
 Circle::Circle(double radius) {
@@ -77,7 +69,11 @@ string Circle::generatePostScript() const {
 
 /***** POLYGON *****/
 
+<<<<<<< HEAD
 Polygon::Polygon(int numSides, double sideLength):_sides(numSides), _sideLength(sideLength) {
+=======
+Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLength(sideLength) {
+>>>>>>> 6df17c4d21662c184590c78a206da7f5898c5b69
 	if(numSides%2!=0) {
 		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
 		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
@@ -95,22 +91,37 @@ Polygon::Polygon(int numSides, double sideLength):_sides(numSides), _sideLength(
 }
 
 string Polygon::generatePostScript() const {
-	int angleSum = (_sides - 2 ) * 180;
-	int angle =  angleSum / _sides;
-	string postscript = "gsave ";
-	postscript += to_string(getWidth() / 2) + "0 translate";
-	int sX, sY, eX, eY = 0;
-	postscript += "0 0 moveto ";
-	for(int c = 0; c < _sides ; c++) {
-		//Find the new end
-		eX = sX + (cos((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
-		eY = sY + (sin((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
-		//Move the start to the end of the previous line
-		sX = eX;
-		sY = eY;
-		postscript += to_string(eX) + " " + to_string(eY) + " lineto ";
-	}
-	postscript += "stroke grestore ";
+	//Rohan's version c++ for loop
+//	int angleSum = (_sides - 2 ) * 180;
+//	int angle =  angleSum / _sides;
+//	string postscript = "gsave ";
+//	postscript += to_string(getWidth() / 2) + "0 translate";
+//	int sX, sY, eX, eY = 0;
+//	postscript += "0 0 moveto ";
+//	for(int c = 0; c < _sides ; c++) {
+//		//Find the new end
+//		eX = sX + (cos((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+//		eY = sY + (sin((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+//		//Move the start to the end of the previous line
+//		sX = eX;
+//		sY = eY;
+//		postscript += to_string(eX) + " " + to_string(eY) + " lineto ";
+//	}
+//	postscript += "stroke grestore ";
+	int totalAngle = (_numSides - 2) * 180; // formula for interior angles
+	string interiorAngle = to_string(180 - (totalAngle / _numSides));
+	string sideLength = to_string(_sideLength);
+	string sidesSubOne = to_string(_numSides - 1);
+
+	string postscript = "gsave "
+	postscript += to_string(getWidth() / 2) + "0 translate newpath ";
+	postscript += "0 0 moveto "; // temporary moveto ?
+	postscript += "1 1 " + sidesSubOne + " { ";
+	postscript += sideLength + " 0 rlineto ";
+	postscript += interiorAngle + " rotate ";
+	postscript += "} for ";
+	postscript += "closepath stroke grestore ";
+
 	return postscript;
 }
 
