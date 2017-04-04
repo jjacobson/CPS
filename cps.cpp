@@ -98,7 +98,7 @@ string Polygon::generatePostScript() const {
 	int angleSum = (_sides - 2 ) * 180;
 	int angle =  angleSum / _sides;
 	string postscript = "gsave ";
-	
+	postscript += to_string(getWidth() / 2) + "0 translate";
 	int sX, sY, eX, eY = 0;
 	postscript += "0 0 moveto ";
 	for(int c = 0; c < _sides ; c++) {
