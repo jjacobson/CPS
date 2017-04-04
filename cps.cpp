@@ -77,7 +77,7 @@ string Circle::generatePostScript() const {
 
 /***** POLYGON *****/
 
-Polygon::Polygon(int numSides, double sideLength) {
+Polygon::Polygon(int numSides, double sideLength):_sides(numSides), _sideLength(sideLength) {
 	if(numSides%2!=0) {
 		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
 		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
@@ -95,7 +95,23 @@ Polygon::Polygon(int numSides, double sideLength) {
 }
 
 string Polygon::generatePostScript() const {
-	return "Polygon";
+	int angleSum = (_sides - 2 ) * 180;
+	int angle =  angleSum / _sides;
+	string postscript = "gsave ";
+	
+	int sX, sY, eX, eY = 0;
+	postscript += "0 0 moveto ";
+	for(int c = 0; c < _sides ; c++) {
+		//Find the new end
+		eX = sX + (cos((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+		eY = sY + (sin((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+		//Move the start to the end of the previous line
+		sX = eX;
+		sY = eY;
+		postscript += to_string(eX) + " " + to_string(eY) + " lineto ";
+	}
+	postscript += "stroke grestore ";
+	return postscript;
 }
 
 /***** RECTANGLE *****/
@@ -139,8 +155,7 @@ Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
 
 /***** RotatedShape *****/
 
-RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
-	_shape = shape;
+RotatedShape::RotatedShape(shared_ptr<Shape> shape, int rotationAngle):_shape(shape), _rotation(rotationAngle) {
 	double width = shape->getWidth();
 	double height = shape->getHeight();
 	if(rotationAngle == 0 || rotationAngle == 180) {
@@ -154,9 +169,10 @@ RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
 }
 
 string RotatedShape::generatePostScript() const {
-	string postscript = "gsave\n";
-	postscript += "Rotated Shape";
-	postscript += "grestore";
+	string postscript = "gsave ";
+	postscript += to_string(_rotation) + " rotate ";
+	postscript += _shape->generatePostScript();
+	postscript += "grestore ";
 	return postscript;
 }
 

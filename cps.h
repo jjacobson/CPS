@@ -71,6 +71,8 @@ public:
 	Polygon(int numSides, double sideLength);
 
 	string generatePostScript() const override;
+private:
+	int _sides, _sideLength;
 };
 
 /***** RECTANGLE *****/
@@ -114,10 +116,11 @@ public:
 class RotatedShape : public Shape
 {
 public:
-	RotatedShape(shared_ptr<Shape> shape, double rotationAngle);
+	RotatedShape(shared_ptr<Shape> shape, int rotationAngle);
 	string generatePostScript() const override;
 private:
 	shared_ptr<Shape> _shape;
+	int _rotation;
 };
 
 /***** LayeredShape *****/
