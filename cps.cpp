@@ -12,8 +12,6 @@
 
 #include "cps.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h> // for M_PI
 #include <cmath>
 using std::sin;
 using std::cos;
@@ -80,18 +78,18 @@ string Circle::generatePostScript() const {
 
 Polygon::Polygon(int numSides, double sideLength) {
 	if(numSides%2!=0) {
-		setHeight(sideLength*(1+cos(M_PI/numSides))/(2*sin(M_PI/numSides)));
-		setWidth((sideLength*sin(M_PI*(numSides-1)/2*numSides))/(sin(M_PI/numSides)));
+		setHeight(sideLength*(1+cos(PI/numSides))/(2*sin(PI/numSides)));
+		setWidth((sideLength*sin(PI*(numSides-1)/2*numSides))/(sin(PI/numSides)));
 	}
 	else if (numSides % 4 == 0)
 	{
-		setHeight(sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides)));
-		setWidth((sideLength*sin(M_PI/numSides))/(sin(M_PI/numSides)));
+		setHeight(sideLength*(cos(PI/numSides))/(sin(PI/numSides)));
+		setWidth((sideLength*sin(PI/numSides))/(sin(PI/numSides)));
 	}
 	else
 	{
-		setHeight(sideLength*(cos(M_PI/numSides))/(sin(M_PI/numSides)));
-		setWidth(sideLength/(sin(M_PI/numSides)));
+		setHeight(sideLength*(cos(PI/numSides))/(sin(PI/numSides)));
+		setWidth(sideLength/(sin(PI/numSides)));
 	}
 }
 

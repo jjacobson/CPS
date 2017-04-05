@@ -26,7 +26,7 @@ using std::ofstream;
 using std::cout;
 using std::endl;
 
-const double M_PI = 3.1415926535;
+const double PI = 3.1415926535;
 
 /***** String to Postscript file *****/
 void stringToPostscriptFile(const string & postscript, const string & filename);

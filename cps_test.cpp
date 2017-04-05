@@ -21,8 +21,6 @@
 #include "catch.hpp"       // For the "Catch" unit-testing framework
 
 // Additional includes for this test program
-#define _USE_MATH_DEFINES
-#include <math.h> // for M_PI
 #include <cmath>
 using std::sin;
 using std::cos;
@@ -67,16 +65,16 @@ TEST_CASE( "Polygon" )
 
     SECTION( "Heigth" )
     {
-        REQUIRE( pol1.getHeight() == 5*(1+cos(M_PI/3))/(2*sin(M_PI/3)) );
-        REQUIRE( pol2.getHeight() == 13*(cos(M_PI/6))/(sin(M_PI/6)));
-        REQUIRE( pol3.getHeight() == 0.9*(cos(M_PI/8))/(sin(M_PI/8)) );
+        REQUIRE( pol1.getHeight() == 5*(1+cos(PI/3))/(2*sin(PI/3)) );
+        REQUIRE( pol2.getHeight() == 13*(cos(PI/6))/(sin(PI/6)));
+        REQUIRE( pol3.getHeight() == 0.9*(cos(PI/8))/(sin(PI/8)) );
     }
 
         SECTION( "Width" )
     {
-        REQUIRE( pol1.getWidth() == (5*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)));
-        REQUIRE( pol2.getWidth() == 13/(sin(M_PI/6)) );
-        REQUIRE( pol3.getWidth() == (0.9*sin(M_PI/8))/(sin(M_PI/8)));
+        REQUIRE( pol1.getWidth() == (5*sin(PI*(3-1)/2*3))/(sin(PI/3)));
+        REQUIRE( pol2.getWidth() == 13/(sin(PI/6)) );
+        REQUIRE( pol3.getWidth() == (0.9*sin(PI/8))/(sin(PI/8)));
     }
 }
 
@@ -140,18 +138,18 @@ TEST_CASE( "Square" )
 
     SECTION( "Heigth" )
     {
-        REQUIRE( square1.getHeight() == 1*(cos(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square2.getHeight() == 15*(cos(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square3.getHeight() == 0.5*(cos(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square4.getHeight() == 200*(cos(M_PI/4))/(sin(M_PI/4)) );
+        REQUIRE( square1.getHeight() == 1*(cos(PI/4))/(sin(PI/4)) );
+        REQUIRE( square2.getHeight() == 15*(cos(PI/4))/(sin(PI/4)) );
+        REQUIRE( square3.getHeight() == 0.5*(cos(PI/4))/(sin(PI/4)) );
+        REQUIRE( square4.getHeight() == 200*(cos(PI/4))/(sin(PI/4)) );
     }
 
         SECTION( "Width" )
     {
-        REQUIRE( square1.getWidth() == (1*sin(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square2.getWidth() == (15*sin(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square3.getWidth() == (0.5*sin(M_PI/4))/(sin(M_PI/4)) );
-        REQUIRE( square4.getWidth() == (200*sin(M_PI/4))/(sin(M_PI/4)) );
+        REQUIRE( square1.getWidth() == (1*sin(PI/4))/(sin(PI/4)) );
+        REQUIRE( square2.getWidth() == (15*sin(PI/4))/(sin(PI/4)) );
+        REQUIRE( square3.getWidth() == (0.5*sin(PI/4))/(sin(PI/4)) );
+        REQUIRE( square4.getWidth() == (200*sin(PI/4))/(sin(PI/4)) );
     }
 }
 
@@ -164,16 +162,16 @@ TEST_CASE( "Triangle" )
 
     SECTION( "Heigth" )
     {
-        REQUIRE( tri1.getHeight() == 5*(1+cos(M_PI/3))/(2*sin(M_PI/3)) );
-        REQUIRE( tri2.getHeight() == 13*(1+cos(M_PI/3))/(2*sin(M_PI/3)) );
-        REQUIRE( tri3.getHeight() == 0.9*(1+cos(M_PI/3))/(2*sin(M_PI/3)) );
+        REQUIRE( tri1.getHeight() == 5*(1+cos(PI/3))/(2*sin(PI/3)) );
+        REQUIRE( tri2.getHeight() == 13*(1+cos(PI/3))/(2*sin(PI/3)) );
+        REQUIRE( tri3.getHeight() == 0.9*(1+cos(PI/3))/(2*sin(PI/3)) );
     }
 
         SECTION( "Width" )
     {
-        REQUIRE( tri1.getWidth() == (5*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
-        REQUIRE( tri2.getWidth() == (13*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
-        REQUIRE( tri3.getWidth() == (0.9*sin(M_PI*(3-1)/2*3))/(sin(M_PI/3)) );
+        REQUIRE( tri1.getWidth() == (5*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
+        REQUIRE( tri2.getWidth() == (13*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
+        REQUIRE( tri3.getWidth() == (0.9*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
     }
 }
 
