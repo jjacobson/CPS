@@ -253,6 +253,32 @@ TEST_CASE( "Compound Shapes" )
     }
 }
 
+TEST_CASE( "Scaled Shape" )
+{
+    Triangle triangle(3.0);
+    Circle circle(3.5);
+    Square square(4.0);
+    Rectangle rectangle(2.0,8.0);
+    Polygon polygon(6,1.0);
+
+    ScaledShape striangle(make_shared<Triangle>(triangle),0.5,1.5);
+    ScaledShape scircle(make_shared<Circle>(circle),2,0.75);
+    ScaledShape srectangle(make_shared<Rectangle>(rectangle),3.2,0.25);
+
+    SECTION("Height")
+    {
+        REQUIRE(striangle.getHeight() == triangle.getHeight()*1.5);
+        REQUIRE(scircle.getHeight() == circle.getHeight()*0.75);
+        REQUIRE(srectangle.getHeight() == rectangle.getHeight()*0.25);
+    }
+    SECTION("Width")
+    {
+        REQUIRE(striangle.getWidth() == triangle.getWidth()*0.5);
+        REQUIRE(scircle.getWidth() == circle.getWidth()*2);
+        REQUIRE(srectangle.getWidth() == rectangle.getWidth()*3.2);
+    }
+}
+
 TEST_CASE( "Stacked Shapes" )
 {
 	Triangle triangle(3.0);
@@ -333,3 +359,86 @@ TEST_CASE( "Stacked Shapes" )
     }
 }
 
+TEST_CASE( "PostScript: Basic Shapes" )
+{   
+    const string filename = "basic_shapes_.ps";
+    string postscript = "";
+
+    // Basic Shapes
+    Rectangle rect(36,72);
+    Square square(36);
+    Circle circ(36);
+    Triangle triangle(36);
+    Polygon hexagon(6,18);
+    Polygon septagon(7,18);
+    // Shapes drawn at bottom left corner to test if centered properly
+    postscript += hexagon.generatePostScript() + " showpage ";
+    postscript += septagon.generatePostScript()+ " showpage ";
+    postscript += rect.generatePostScript() + " showpage ";
+    postscript += circ.generatePostScript() + " showpage ";
+    postscript += square.generatePostScript() + " showpage ";
+    postscript += triangle.generatePostScript() + " showpage ";
+    // Shapes drawn all on one page
+    postscript += "144 144 translate ";
+    postscript += hexagon.generatePostScript() + " 0 72 translate ";
+    postscript += septagon.generatePostScript()+ " 0 72 translate ";
+    postscript += rect.generatePostScript() + " 0 72 translate ";
+    postscript += circ.generatePostScript() + " 0 72 translate ";
+    postscript += square.generatePostScript() + " 0 72 translate ";
+    postscript += triangle.generatePostScript(); 
+
+    stringToPostscriptFile(postscript,filename);
+}
+
+TEST_CASE( "PostScript: Compound Shapes" )
+{
+    const string filename = "compound_shapes.ps";
+    string postscript = "";
+
+    // Basic shapes used for compound shapes
+    Rectangle rect(36,72);
+    Square square(36);
+    Circle circ(36);
+    Triangle triangle(72);
+    Polygon hexagon(6,36);
+    Polygon septagon(7,36);
+
+    // Vector of basic shapes
+    vector<shared_ptr<Shape>> basic_shapes
+    {
+        make_shared<Rectangle>(rect), make_shared<Square>(square),
+        make_shared<Circle>(circ), make_shared<Triangle>(triangle), 
+        make_shared<Polygon>(hexagon), make_shared<Polygon>(septagon)
+    };
+    // Layered, Vertical, Horizontal shapes
+    LayeredShape ls1(basic_shapes);
+    VerticalShape vs1(basic_shapes);
+    HorizontalShape hs1(basic_shapes);
+
+    postscript += "144 144 translate ";
+    postscript += ls1.generatePostScript() + " showpage 144 144 translate ";
+    postscript += vs1.generatePostScript() + " showpage 144 144 translate ";
+    postscript += hs1.generatePostScript() + " showpage 144 144 translate ";
+    // Scaled Basic Shapes
+    ScaledShape s_rect(make_shared<Rectangle>(rect), 0.5, 0.5);
+    ScaledShape s_square(make_shared<Square>(square), 1.5, 1.5);
+    ScaledShape s_circ(make_shared<Circle>(circ), 2, 0.5);
+    ScaledShape s_triangle(make_shared<Triangle>(triangle), 2, 0.5);
+    ScaledShape s_hex(make_shared<Polygon>(hexagon), 1.5, 1.5);
+    ScaledShape s_sept(make_shared<Polygon>(septagon), 0.5, 0.5);
+
+    postscript += "144 144 translate " + rect.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_rect.generatePostScript() + " showpage ";
+    postscript += "144 144 translate " + square.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_square.generatePostScript() + " showpage ";
+    postscript += "144 144 translate " + circ.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_circ.generatePostScript() + " showpage "; 
+    postscript += "144 144 translate " + triangle.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_triangle.generatePostScript() + " showpage ";
+    postscript += "144 144 translate " + hexagon.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_hex.generatePostScript() + " showpage ";
+    postscript += "144 144 translate " + septagon.generatePostScript() + " ";
+    postscript += "0 216 translate " + s_sept.generatePostScript();
+        
+    stringToPostscriptFile(postscript,filename);
+}

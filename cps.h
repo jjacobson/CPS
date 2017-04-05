@@ -44,8 +44,8 @@ public:
 protected:
 	virtual void setWidth(double width);
 	virtual void setHeight(double height);
-	virtual void setNumSides(int numSides);
-	virtual void setSideLength(double sideLength);
+//	virtual void setNumSides(int numSides);
+//	virtual void setSideLength(double sideLength);
 
 private:
 	double _height;
@@ -71,6 +71,8 @@ public:
 	Polygon(int numSides, double sideLength);
 
 	string generatePostScript() const override;
+private:
+	int _numSides, _sideLength;
 };
 
 /***** RECTANGLE *****/
@@ -114,10 +116,11 @@ public:
 class RotatedShape : public Shape
 {
 public:
-	RotatedShape(shared_ptr<Shape> shape, double rotationAngle);
+	RotatedShape(shared_ptr<Shape> shape, int rotationAngle);
 	string generatePostScript() const override;
 private:
 	shared_ptr<Shape> _shape;
+	int _rotation;
 };
 
 /***** LayeredShape *****/
@@ -151,6 +154,21 @@ public:
 	string generatePostScript() const override;
 private:
 	vector<shared_ptr<Shape>> _shapes;
+};
+
+/***** Scaled Shape *****/
+
+class ScaledShape : public Shape
+{
+public:
+	ScaledShape(shared_ptr<Shape> shape, double fx, double fy);
+	string generatePostScript() const override;
+	double getWidth() const override;
+	double getHeight() const override;
+private:
+	double _fx;
+	double _fy;
+	shared_ptr<Shape> _shape;
 };
 
 #endif // CPS_H_INCLUDED

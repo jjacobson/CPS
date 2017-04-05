@@ -51,14 +51,6 @@ void Shape::setHeight(double height) {
 	_height = height;
 }
 
-void Shape::setNumSides(int numSides) {
-	_numSides = numSides;
-}
-
-void Shape::setSideLength(double sideLength) {
-	_sideLength = sideLength;
-}
-
 /***** CIRCLE *****/
 
 Circle::Circle(double radius) {
@@ -69,14 +61,13 @@ Circle::Circle(double radius) {
 string Circle::generatePostScript() const {
 	string radius = to_string(getWidth()/2);
 	string postscript = 
-	"gsave " + radius + " " + radius + " translate " +
-	"newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
+	"gsave newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
 	return postscript;
 }
 
 /***** POLYGON *****/
 
-Polygon::Polygon(int numSides, double sideLength) {
+Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLength(sideLength) {
 	if(numSides%2!=0) {
 		setHeight(sideLength*(1+cos(PI/numSides))/(2*sin(PI/numSides)));
 		setWidth((sideLength*sin(PI*(numSides-1)/2*numSides))/(sin(PI/numSides)));
@@ -94,7 +85,38 @@ Polygon::Polygon(int numSides, double sideLength) {
 }
 
 string Polygon::generatePostScript() const {
-	return "Polygon";
+	//Rohan's version c++ for loop
+//	int angleSum = (_sides - 2 ) * 180;
+//	int angle =  angleSum / _sides;
+//	string postscript = "gsave ";
+//	postscript += to_string(getWidth() / 2) + "0 translate";
+//	int sX, sY, eX, eY = 0;
+//	postscript += "0 0 moveto ";
+//	for(int c = 0; c < _sides ; c++) {
+//		//Find the new end
+//		eX = sX + (cos((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+//		eY = sY + (sin((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
+//		//Move the start to the end of the previous line
+//		sX = eX;
+//		sY = eY;
+//		postscript += to_string(eX) + " " + to_string(eY) + " lineto ";
+//	}
+//	postscript += "stroke grestore ";
+	int totalAngle = (_numSides - 2) * 180; // formula for interior angles
+	string interiorAngle = to_string(180 - (totalAngle / _numSides));
+	string sideLength = to_string(_sideLength);
+	string sidesSubOne = to_string(_numSides - 1);
+
+	string postscript = "gsave ";
+	postscript += to_string(getWidth() / 2) + " 0 translate newpath ";
+	postscript += "0 0 moveto "; // temporary moveto ?
+	postscript += "1 1 " + sidesSubOne + " { ";
+	postscript += sideLength + " 0 rlineto ";
+	postscript += interiorAngle + " rotate ";
+	postscript += "} for ";
+	postscript += "closepath stroke grestore ";
+
+	return postscript;
 }
 
 /***** RECTANGLE *****/
@@ -107,10 +129,13 @@ Rectangle::Rectangle(double height, double width) {
 string Rectangle::generatePostScript() const {
 	string width = to_string(getWidth());
 	string height = to_string(getHeight());
-	string postscript = "gsave newpath 0 0 moveto ";
-	postscript += height + " 0 lineto "; 
-	postscript += height + " " + width + " lineto ";
-	postscript += "0 " + width + " lineto closepath stroke grestore "; 
+	string halfWidth = to_string(getWidth()/2);
+	string halfHeight = to_string(getHeight()/2);
+
+	string postscript = "gsave newpath " + halfWidth + " " + halfHeight + " moveto ";
+	postscript += "0 -" + height + " rlineto "; 
+	postscript += "-" + width + " 0 rlineto ";
+	postscript += "0 " + height + " rlineto closepath stroke grestore "; 
 	return postscript;
 }
 
@@ -135,8 +160,7 @@ Triangle::Triangle(double sideLength): Polygon(3, sideLength) {}
 
 /***** RotatedShape *****/
 
-RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
-	_shape = shape;
+RotatedShape::RotatedShape(shared_ptr<Shape> shape, int rotationAngle):_shape(shape), _rotation(rotationAngle) {
 	double width = shape->getWidth();
 	double height = shape->getHeight();
 	if(rotationAngle == 0 || rotationAngle == 180) {
@@ -150,9 +174,10 @@ RotatedShape::RotatedShape(shared_ptr<Shape> shape, double rotationAngle) {
 }
 
 string RotatedShape::generatePostScript() const {
-	string postscript = "gsave\n";
-	postscript += "Rotated Shape";
-	postscript += "grestore";
+	string postscript = "gsave ";
+	postscript += to_string(_rotation) + " rotate ";
+	postscript += _shape->generatePostScript();
+	postscript += "grestore ";
 	return postscript;
 }
 
@@ -177,7 +202,7 @@ string LayeredShape::generatePostScript() const {
 	string postscript = "gsave ";
 	for (auto const shape : _shapes)
 	{
-		postscript += shape->generatePostScript() + " ";
+		postscript += shape->generatePostScript();
 	}
 	postscript += "grestore ";
 	return postscript;
@@ -201,10 +226,12 @@ VerticalShape::VerticalShape(vector<shared_ptr<Shape>> shapes) {
 
 string VerticalShape::generatePostScript() const {
 	string postscript = "gsave ";
-	for (auto const shape : _shapes)
+	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
 	{
-		postscript += shape->generatePostScript() + "0 ";
-		postscript += to_string(shape->getHeight()) + " translate ";
+		postscript += (*iter)->generatePostScript();
+		postscript += "0 " + to_string((*iter)->getHeight()/2) + " translate ";	
+		if (iter+1 != _shapes.end())
+			postscript += "0 " + to_string((*(iter+1))->getHeight()/2) + " translate ";	
 	}
 	postscript += "grestore ";
 	return postscript;
@@ -228,11 +255,34 @@ HorizontalShape::HorizontalShape(vector<shared_ptr<Shape>> shapes) {
 
 string HorizontalShape::generatePostScript() const {
 	string postscript = "gsave ";
-	for (auto const shape : _shapes)
+	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
 	{
-		postscript += shape->generatePostScript();
-		postscript += to_string(shape->getWidth()) + " 0 translate ";
+		postscript += (*iter)->generatePostScript();
+		postscript += to_string((*iter)->getWidth()/2) + " 0 translate ";	
+		if (iter+1 != _shapes.end())
+			postscript += to_string((*(iter+1))->getWidth()/2) + " 0 translate ";
 	}
 	postscript += "grestore ";
 	return postscript;
 }
+
+/***** ScaledShape *****/
+
+ScaledShape::ScaledShape(shared_ptr<Shape> shape, double fx, double fy): _shape(shape), _fx(fx), _fy(fy)
+{}
+
+double ScaledShape::getWidth() const {
+	return _shape->getWidth()*_fx;
+}
+
+double ScaledShape::getHeight() const {
+	return _shape->getHeight()*_fy;
+}
+
+string ScaledShape::generatePostScript() const {
+	string postscript = "gsave ";
+	postscript += to_string(_fx) + " " + to_string(_fy) + " scale ";
+	postscript += _shape->generatePostScript() + "grestore ";
+	return postscript;
+}
+
