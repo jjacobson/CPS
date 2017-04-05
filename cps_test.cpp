@@ -361,7 +361,7 @@ TEST_CASE( "Stacked Shapes" )
 
 TEST_CASE( "PostScript: Basic Shapes" )
 {   
-    const string filename = "basic_shapes_.ps";
+    const string filename = "basic_shapes.ps";
     string postscript = "";
 
     // Basic Shapes

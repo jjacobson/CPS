@@ -44,8 +44,6 @@ public:
 protected:
 	virtual void setWidth(double width);
 	virtual void setHeight(double height);
-//	virtual void setNumSides(int numSides);
-//	virtual void setSideLength(double sideLength);
 
 private:
 	double _height;
