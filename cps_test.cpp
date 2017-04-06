@@ -72,7 +72,7 @@ TEST_CASE( "Polygon" )
 
         SECTION( "Width" )
     {
-        REQUIRE( pol1.getWidth() == (5*sin(PI*(3-1)/2*3))/(sin(PI/3)));
+        REQUIRE( pol1.getWidth() == (5*sin(PI*(3-1)/(2*3)))/(sin(PI/3)));
         REQUIRE( pol2.getWidth() == 13/(sin(PI/6)) );
         REQUIRE( pol3.getWidth() == (0.9*sin(PI/8))/(sin(PI/8)));
     }
@@ -169,9 +169,9 @@ TEST_CASE( "Triangle" )
 
         SECTION( "Width" )
     {
-        REQUIRE( tri1.getWidth() == (5*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
-        REQUIRE( tri2.getWidth() == (13*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
-        REQUIRE( tri3.getWidth() == (0.9*sin(PI*(3-1)/2*3))/(sin(PI/3)) );
+        REQUIRE( tri1.getWidth() == (5*sin(PI*(3-1)/(2*3)))/(sin(PI/3)) );
+        REQUIRE( tri2.getWidth() == (13*sin(PI*(3-1)/(2*3)))/(sin(PI/3)) );
+        REQUIRE( tri3.getWidth() == (0.9*sin(PI*(3-1)/(2*3)))/(sin(PI/3)) );
     }
 }
 
