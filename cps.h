@@ -48,8 +48,6 @@ protected:
 private:
 	double _height;
 	double _width;
-	int _numSides;
-	double _sideLength;
 };
 
 /***** CIRCLE *****/
@@ -70,7 +68,8 @@ public:
 
 	string generatePostScript() const override;
 private:
-	int _numSides, _sideLength;
+	int _numSides;
+	double _sideLength;
 };
 
 /***** RECTANGLE *****/
