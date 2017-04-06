@@ -107,9 +107,15 @@ string Polygon::generatePostScript() const {
 	string sideLength = to_string(_sideLength);
 	string sidesSubOne = to_string(_numSides - 1);
 
+	string tx = to_string(_sideLength / -2);
+	string ty = to_string(getHeight() / -2);
+
+	string mx = to_string(0);
+	string my = to_string(0);
+
 	string postscript = "gsave ";
-	postscript += to_string(getWidth() / 2) + " 0 translate newpath ";
-	postscript += "0 0 moveto "; // temporary moveto ?
+	postscript += tx + " " + ty + " translate newpath ";
+	postscript += mx + " " + my + " moveto ";
 	postscript += "1 1 " + sidesSubOne + " { ";
 	postscript += sideLength + " 0 rlineto ";
 	postscript += interiorAngle + " rotate ";
