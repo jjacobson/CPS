@@ -28,6 +28,13 @@ using std::endl;
 
 const double PI = 3.1415926535;
 
+/***** Postscript Helper Functions *****/
+string translate(int x, int y);
+string moveto(int x, int y);
+string showpage();
+string gsave();
+string gestore();
+
 /***** String to Postscript file *****/
 void stringToPostscriptFile(const string & postscript, const string & filename);
 

@@ -17,6 +17,32 @@ using std::sin;
 using std::cos;
 using std::move;
 
+/***** Postscript Helper Functions *****/
+string translate(int x, int y)
+{
+	return to_string(x) + " " + to_string(y) + " translate ";
+}
+
+string moveto(int x, int y)
+{
+	return to_string(x) + " " + to_string(y) + " moveto ";
+}
+
+string showpage()
+{
+	return "showpage ";
+}
+
+string gsave()
+{
+	return "gsave ";
+}
+
+string gestore()
+{
+	return "gestore ";
+}
+
 /***** String to Postscript file *****/
 void stringToPostscriptFile(const string & postscript, const string & filename)
 {
@@ -60,8 +86,7 @@ Circle::Circle(double radius) {
 
 string Circle::generatePostScript() const {
 	string radius = to_string(getWidth()/2);
-	string postscript = 
-	"gsave newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
+	string postscript = "gsave newpath 0 0 " + radius + " 0 360 arc closepath stroke grestore ";
 	return postscript;
 }
 
@@ -71,7 +96,6 @@ Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLe
 	if(numSides % 2 != 0) {
 		setHeight(sideLength*(1+cos(PI/numSides))/(2*sin(PI/numSides)));
 		setWidth((sideLength*sin(PI*(numSides-1)/(2*numSides)))/(sin(PI/numSides)));
-		//width = (e sin(π(n-1)/2n))/(sin(π/n))
 	}
 	else if (numSides % 4 == 0)
 	{
@@ -86,23 +110,6 @@ Polygon::Polygon(int numSides, double sideLength) : _numSides(numSides), _sideLe
 }
 
 string Polygon::generatePostScript() const {
-	//Rohan's version c++ for loop
-//	int angleSum = (_sides - 2 ) * 180;
-//	int angle =  angleSum / _sides;
-//	string postscript = "gsave ";
-//	postscript += to_string(getWidth() / 2) + "0 translate";
-//	int sX, sY, eX, eY = 0;
-//	postscript += "0 0 moveto ";
-//	for(int c = 0; c < _sides ; c++) {
-//		//Find the new end
-//		eX = sX + (cos((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
-//		eY = sY + (sin((M_PI / 180) * ((180 - angle) * c)) * _sideLength);
-//		//Move the start to the end of the previous line
-//		sX = eX;
-//		sY = eY;
-//		postscript += to_string(eX) + " " + to_string(eY) + " lineto ";
-//	}
-//	postscript += "stroke grestore ";
 	int totalAngle = (_numSides - 2) * 180; // formula for interior angles
 	string interiorAngle = to_string(180 - (totalAngle / _numSides));
 	string sideLength = to_string(_sideLength);
