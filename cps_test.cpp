@@ -442,3 +442,46 @@ TEST_CASE( "PostScript: Compound Shapes" )
         
     stringToPostscriptFile(postscript,filename);
 }
+
+TEST_CASE ("Multi Shape")
+{
+    const string filename = "multi_shape.ps";
+    string postscript = "";
+
+    Circle circ(72);
+    Triangle tri(72);
+    Square square(72);
+    Polygon hex(6,72);
+    Polygon dec(10,72);
+
+    ShapesInShape mCirc(make_shared<Circle>(circ),3);
+    ShapesInShape mTri(make_shared<Triangle>(tri),3);
+    ShapesInShape mSquare(make_shared<Square>(square),3);
+    ShapesInShape mHex(make_shared<Polygon>(hex),20);
+    ShapesInShape mDec(make_shared<Polygon>(dec),100);
+
+
+    SECTION("Width")
+    {
+        REQUIRE(mCirc.getWidth() == circ.getWidth());
+        REQUIRE(mTri.getWidth() == mTri.getWidth());
+        REQUIRE(mSquare.getWidth() == mSquare.getWidth());
+        REQUIRE(mHex.getWidth() == mHex.getWidth());
+        REQUIRE(mDec.getWidth() == mDec.getWidth());
+    }
+    SECTION("Height")
+    {
+        REQUIRE(mCirc.getHeight() == circ.getHeight());
+        REQUIRE(mTri.getHeight() == mTri.getHeight());
+        REQUIRE(mSquare.getHeight() == mSquare.getHeight());
+        REQUIRE(mHex.getHeight() == mHex.getHeight());
+        REQUIRE(mDec.getHeight() == mDec.getHeight());
+    }
+
+    postscript += translate(144,144) + mCirc.generatePostScript() + showpage();
+    postscript += translate(144,144) + mTri.generatePostScript() + showpage();
+    postscript += translate(144,144) + mSquare.generatePostScript() + showpage();
+    postscript += translate(144,144) + mHex.generatePostScript() + showpage();
+    postscript += translate(288,288) + mDec.generatePostScript() + showpage();
+    stringToPostscriptFile(postscript,filename);
+}

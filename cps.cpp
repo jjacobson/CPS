@@ -283,14 +283,9 @@ string HorizontalShape::generatePostScript() const {
 /***** ScaledShape *****/
 
 ScaledShape::ScaledShape(shared_ptr<Shape> shape, double fx, double fy): _shape(shape), _fx(fx), _fy(fy)
-{}
-
-double ScaledShape::getWidth() const {
-	return _shape->getWidth()*_fx;
-}
-
-double ScaledShape::getHeight() const {
-	return _shape->getHeight()*_fy;
+{
+	setWidth(shape->getWidth()*fx);
+	setHeight(shape->getHeight()*fy);
 }
 
 string ScaledShape::generatePostScript() const {
@@ -299,4 +294,29 @@ string ScaledShape::generatePostScript() const {
 	postscript += _shape->generatePostScript() + "grestore ";
 	return postscript;
 }
+
+/***** Shapes In Shape *****/
+
+ShapesInShape::ShapesInShape(shared_ptr<Shape> shape, int numShapes)
+{
+	setWidth(shape->getWidth());
+	setHeight(shape->getHeight());
+
+	for (auto i = 1; i <= numShapes; ++i)
+	{
+		double scale = (double)i/numShapes;
+		_shapes.push_back(make_shared<ScaledShape>(shape,scale,scale));
+	}
+}
+
+string ShapesInShape::generatePostScript() const {
+	string postscript = "gsave ";
+	for (auto const & shape : _shapes)
+	{
+		postscript += shape->generatePostScript();
+	}
+	postscript += "grestore ";
+	return postscript;
+}
+
 

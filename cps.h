@@ -20,6 +20,7 @@ using std::to_string;
 using std::vector;
 #include <memory>
 using std::shared_ptr;
+using std::make_shared;
 #include <fstream>
 using std::ofstream;
 #include <iostream>
@@ -167,12 +168,21 @@ class ScaledShape : public Shape
 public:
 	ScaledShape(shared_ptr<Shape> shape, double fx, double fy);
 	string generatePostScript() const override;
-	double getWidth() const override;
-	double getHeight() const override;
 private:
 	double _fx;
 	double _fy;
 	shared_ptr<Shape> _shape;
+};
+
+/***** Shapes In Shape *****/
+
+class ShapesInShape : public Shape
+{
+public:
+	ShapesInShape(shared_ptr<Shape> shape, int numShapes);
+	string generatePostScript() const override;
+private:
+	vector<shared_ptr<Shape>> _shapes;
 };
 
 #endif // CPS_H_INCLUDED
