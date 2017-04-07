@@ -33,7 +33,7 @@ string translate(int x, int y);
 string moveto(int x, int y);
 string showpage();
 string gsave();
-string gestore();
+string grestore();
 
 /***** String to Postscript file *****/
 void stringToPostscriptFile(const string & postscript, const string & filename);

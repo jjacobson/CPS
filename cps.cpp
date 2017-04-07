@@ -38,9 +38,9 @@ string gsave()
 	return "gsave ";
 }
 
-string gestore()
+string grestore()
 {
-	return "gestore ";
+	return "grestore ";
 }
 
 /***** String to Postscript file *****/
