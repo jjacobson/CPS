@@ -195,6 +195,42 @@ string RotatedShape::generatePostScript() const {
 	return postscript;
 }
 
+/***** CompositeShape *****/
+
+CompositeShape::CompositeShape(vector<shared_ptr<Shape>> shapes) {
+	_shapes = shapes;
+	double width = 0;
+	double height = 0;
+	for (auto const & shape : _shapes)
+	{
+		if (shape->getHeight() > height)
+			height = shape->getHeight();
+		if (shape->getWidth() > width)
+			width = shape->getWidth();
+	}
+	setWidth(width);
+	setHeight(height);
+}
+
+string CompositeShape::generatePostScript() const {
+	string postscript = "gsave ";
+	for (auto shape : _shapes)
+	{
+		if (shape != *(_shapes.begin()))
+		{
+			postscript += translate(shape);
+		}
+		postscript += shape->generatePostScript();
+		postscript += translate(shape);
+	}
+	postscript += "grestore ";
+	return postscript;
+}
+
+string CompositeShape::translate(shared_ptr<Shape> shape) const {
+	return string();
+}
+
 /***** LayeredShape *****/
 
 LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
@@ -210,16 +246,6 @@ LayeredShape::LayeredShape(vector<shared_ptr<Shape>> shapes) {
 	}
 	setWidth(width);
 	setHeight(height);
-}
-
-string LayeredShape::generatePostScript() const {
-	string postscript = "gsave ";
-	for (auto const shape : _shapes)
-	{
-		postscript += shape->generatePostScript();
-	}
-	postscript += "grestore ";
-	return postscript;
 }
 
 /***** VerticalShape *****/
@@ -238,17 +264,8 @@ VerticalShape::VerticalShape(vector<shared_ptr<Shape>> shapes) {
 	setHeight(height);
 }
 
-string VerticalShape::generatePostScript() const {
-	string postscript = "gsave ";
-	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
-	{
-		postscript += (*iter)->generatePostScript();
-		postscript += "0 " + to_string((*iter)->getHeight()/2) + " translate ";	
-		if (iter+1 != _shapes.end())
-			postscript += "0 " + to_string((*(iter+1))->getHeight()/2) + " translate ";	
-	}
-	postscript += "grestore ";
-	return postscript;
+string VerticalShape::translate(shared_ptr<Shape> shape) const {
+	return "0 " + to_string(shape->getHeight() / 2) + " translate ";
 }
 
 /***** HorizontalShape *****/
@@ -267,17 +284,8 @@ HorizontalShape::HorizontalShape(vector<shared_ptr<Shape>> shapes) {
 	setHeight(height);
 }
 
-string HorizontalShape::generatePostScript() const {
-	string postscript = "gsave ";
-	for (auto iter = _shapes.begin(); iter != _shapes.end(); ++iter)
-	{
-		postscript += (*iter)->generatePostScript();
-		postscript += to_string((*iter)->getWidth()/2) + " 0 translate ";	
-		if (iter+1 != _shapes.end())
-			postscript += to_string((*(iter+1))->getWidth()/2) + " 0 translate ";
-	}
-	postscript += "grestore ";
-	return postscript;
+string HorizontalShape::translate(shared_ptr<Shape> shape) const {
+	return to_string(shape->getWidth() / 2) + " 0 translate ";
 }
 
 /***** ScaledShape *****/

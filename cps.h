@@ -128,37 +128,46 @@ private:
 	int _rotation;
 };
 
+/***** CompositeShape *****/
+
+class CompositeShape : public Shape
+{
+public:
+	CompositeShape() = default;
+	CompositeShape(vector<shared_ptr<Shape>> shapes);
+	virtual ~CompositeShape() = default;
+	string generatePostScript() const override;
+protected:
+	vector<shared_ptr<Shape>> _shapes;
+	virtual string translate(shared_ptr<Shape> shape) const;
+};
+
 /***** LayeredShape *****/
 
-class LayeredShape : public Shape
+class LayeredShape : public CompositeShape
 {
 public:
 	LayeredShape(vector<shared_ptr<Shape>> shapes);
-	string generatePostScript() const override;
-private:
-	vector<shared_ptr<Shape>> _shapes;
 };
 
 /***** VerticalShape *****/
 
-class VerticalShape : public Shape
+class VerticalShape : public CompositeShape
 {
 public:
 	VerticalShape(vector<shared_ptr<Shape>> shapes);
-	string generatePostScript() const override;
-private:
-	vector<shared_ptr<Shape>> _shapes;
+protected:
+	string translate(shared_ptr<Shape> shape) const override;
 };
 
 /***** HorizontalShape *****/
 
-class HorizontalShape : public Shape
+class HorizontalShape : public CompositeShape
 {
 public:
 	HorizontalShape(vector<shared_ptr<Shape>> shapes);
-	string generatePostScript() const override;
-private:
-	vector<shared_ptr<Shape>> _shapes;
+protected:
+	string translate(shared_ptr<Shape> shape) const override;
 };
 
 /***** Scaled Shape *****/
